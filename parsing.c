@@ -29,20 +29,22 @@ void add_history(char* unused) {}
 
 int main(int argc, char **argv) {
   /* Create some parsers */
-  mpc_parser_t* Number   = mpc_new("number");
-  mpc_parser_t* Operator = mpc_new("operator");
-  mpc_parser_t* Expr     = mpc_new("expr");
-  mpc_parser_t* Hisp     = mpc_new("hisp");
+  mpc_parser_t *Number   = mpc_new("number");
+  mpc_parser_t *Operator = mpc_new("operator");
+  mpc_parser_t *Expr     = mpc_new("expr");
+  mpc_parser_t *Function = mpc_new("function");
+  mpc_parser_t *Hisp     = mpc_new("hisp");
 
   /* Define them with the following Language */
   mpca_lang(MPC_LANG_DEFAULT,
-      "                                                   \
-      number   : /-?[0-9]+/ ;                             \
-      operator : '+' | '-' | '*' | '/' | '%' ;            \
-      expr     : <number> | '(' <operator> <expr>+ ')' ;  \
-      hisp     : /^/ <operator> <expr>+ /$/ ;             \
+      "                                                             \
+      number   : /-?[0-9]+.?[0-9]*/ ;                               \
+      operator : '+' | '-' | '*' | '/' | '%'  ;                     \
+      function : /add|sub|mul|div/ ;                                \
+      expr     : <number> | '(' <operator> <expr>+ ')' ;            \
+      hisp     : /^/ <operator> <expr>+ /$/  | <function> <expr>* ; \
       ",
-      Number, Operator, Expr, Hisp);
+      Number, Operator, Function, Expr, Hisp);
 
   puts("Hercules Lisp Version 0.0.0.0.1");
   puts("Press Ctrl+c to Exit\n");
@@ -67,7 +69,7 @@ int main(int argc, char **argv) {
   }
 
   /* Undefine and delete our parsers */
-  mpc_cleanup(4, Number, Operator, Expr, Hisp);
+  mpc_cleanup(4, Number, Operator, Function, Expr, Hisp);
 
   return 0;
 }
