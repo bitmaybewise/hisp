@@ -46,6 +46,12 @@ long eval_op(long x, char* op, long y) {
   if (strcmp(op, "^") == 0) {
     return pow(x,y);
   }
+  if (strcmp(op, "min") == 0) {
+    return x < y ? x : y;
+  }
+  if (strcmp(op, "max") == 0) {
+    return x > y ? x : y;
+  }
 
   return 0;
 }
@@ -83,7 +89,7 @@ int main(int argc, char **argv) {
       "                                                                               \
       number   : /-?[0-9]+/ ;                                                         \
       operator : '+' | '-' | '*' | '/' | '%' | '^'  ;                                 \
-      function : /add|sub|mul|div/ ;                                                  \
+      function : /add|sub|mul|div|min|max/ ;                                                  \
       expr     : <number> | '(' <operator> <expr>+ ')' | '(' <function> <expr>+ ')' ; \
       hisp     : /^/ <operator> <expr>+ /$/  | /^/ <function> <expr>+ /$/ ;           \
       ",
