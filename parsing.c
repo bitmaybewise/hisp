@@ -40,6 +40,12 @@ long eval_op(long x, char* op, long y) {
   if (strcmp(op, "/") == 0 || strcmp(op, "div") == 0) {
     return x / y;
   }
+  if (strcmp(op, "%") == 0) {
+    return x % y;
+  }
+  if (strcmp(op, "^") == 0) {
+    return pow(x,y);
+  }
 
   return 0;
 }
@@ -76,7 +82,7 @@ int main(int argc, char **argv) {
   mpca_lang(MPC_LANG_DEFAULT,
       "                                                                               \
       number   : /-?[0-9]+/ ;                                                         \
-      operator : '+' | '-' | '*' | '/' | '%'  ;                                       \
+      operator : '+' | '-' | '*' | '/' | '%' | '^'  ;                                 \
       function : /add|sub|mul|div/ ;                                                  \
       expr     : <number> | '(' <operator> <expr>+ ')' | '(' <function> <expr>+ ')' ; \
       hisp     : /^/ <operator> <expr>+ /$/  | /^/ <function> <expr>+ /$/ ;           \
