@@ -68,9 +68,13 @@ long eval(mpc_ast_t* t) {
   long x = eval(t->children[2]);
 
   int i = 3;
-  while (strstr(t->children[i]->tag, "expr")) {
-    x = eval_op(x, op, eval(t->children[i]));
-    i++;
+  if (strstr(t->children[i]->tag, "expr")) {
+    while (strstr(t->children[i]->tag, "expr")) {
+      x = eval_op(x, op, eval(t->children[i]));
+      i++;
+    }
+  } else if (strcmp(op, "-") == 0) {
+    x = -x;
   }
 
   return x;
@@ -89,7 +93,7 @@ int main(int argc, char **argv) {
       "                                                                               \
       number   : /-?[0-9]+/ ;                                                         \
       operator : '+' | '-' | '*' | '/' | '%' | '^'  ;                                 \
-      function : /add|sub|mul|div|min|max/ ;                                                  \
+      function : /add|sub|mul|div|min|max/ ;                                          \
       expr     : <number> | '(' <operator> <expr>+ ')' | '(' <function> <expr>+ ')' ; \
       hisp     : /^/ <operator> <expr>+ /$/  | /^/ <function> <expr>+ /$/ ;           \
       ",
