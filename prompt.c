@@ -349,12 +349,53 @@ lval* builtin_join(lval* a) {
   return x;
 }
 
+lval* builtin_len(lval* a) {
+  LASSERT(a, (a->count == 1                  ), "Function 'len' passed too many arguments!");
+  LASSERT(a, (a->cell[0]->type == LVAL_QEXPR ), "Function 'len' passed incorrect type!");
+
+  lval* len = lval_num(a->cell[0]->count);
+  lval_del(a);
+  return len;
+}
+
+lval* builtin_cons(lval* a) {
+  LASSERT(a, (a->count == 2                  ), "Function 'cons' passed too many arguments!");
+  LASSERT(a, (a->cell[1]->type == LVAL_QEXPR ), "Function 'cons' passed incorrect type!");
+
+  lval* x = lval_pop(a, 0);
+  lval* y = lval_qexpr();
+  y = lval_add(y, x);
+
+  while (a->cell[0]->count) {
+    y = lval_add(y, lval_pop(a->cell[0], 0));
+  }
+
+  lval_del(a);
+  return y;
+}
+
+lval* builtin_init(lval* a) {
+  LASSERT(a, (a->count == 1                  ), "Function 'cons' passed too many arguments!");
+  LASSERT(a, (a->cell[0]->type == LVAL_QEXPR ), "Function 'cons' passed incorrect type!");
+
+  lval* x = lval_qexpr();
+  while (a->cell[0]->count > 1) {
+    x = lval_add(x, lval_pop(a->cell[0], 0));
+  }
+
+  lval_del(a);
+  return x;
+}
+
 lval* builtin(lval* a, char* func) {
   if (strcmp("list", func) == 0) { return builtin_list(a); }
   if (strcmp("head", func) == 0) { return builtin_head(a); }
   if (strcmp("tail", func) == 0) { return builtin_tail(a); }
   if (strcmp("join", func) == 0) { return builtin_join(a); }
   if (strcmp("eval", func) == 0) { return builtin_eval(a); }
+  if (strcmp("len",  func) == 0) { return builtin_len(a);  }
+  if (strcmp("cons", func) == 0) { return builtin_cons(a); }
+  if (strcmp("init", func) == 0) { return builtin_init(a); }
   if (strstr("+-/*%^", func)) { return builtin_op(a, func); }
   lval_del(a);
   return lval_err("Unknown Function!");
@@ -373,7 +414,7 @@ int main(int argc, char **argv) {
   mpca_lang(MPC_LANG_DEFAULT,
       "                                                       \
         number   : /-?[0-9]+/ ;                               \
-        symbol   : \"list\" | \"head\" | \"tail\" | \"join\" | \"eval\" | '+' | '-' | '*' | '/' | '%' | '^'  ; \
+        symbol   : \"list\" | \"head\" | \"tail\" | \"join\" | \"eval\" | \"cons\" | \"len\" | \"init\" | '+' | '-' | '*' | '/' | '%' | '^'  ; \
         sexpr    : '(' <expr>* ')' ;                          \
         qexpr    : '{' <expr>* '}' ;                          \
         expr     : <number> | <symbol> | <sexpr> | <qexpr>  ; \
