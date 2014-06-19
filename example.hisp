@@ -1,0 +1,9 @@
+; hello value
+(def {hello} "hello world")
+
+; add two numbers
+(def {add} (\ {x y} {+ x y}))
+
+; printing values
+(print hello)
+(print (add 1 2))
