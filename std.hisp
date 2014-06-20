@@ -1,0 +1,88 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;
+; Hisp Standard Library
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def {nil} {})
+
+(def {true} 1)
+
+(def {false} 0)
+
+(def {fn} (\ {f b} {
+  def (head f) (\ (tail f) b) }))
+
+(fn {count l} {
+  if (== l nil)
+    {0}
+    {+ 1 (count (tail l))}})
+
+(fn {first l} {eval (head l)})
+
+(fn {nth n l} {
+  if (== n 0)
+    {first l}
+    {nth (- n 1) (tail l)}})
+
+(fn {last l} {nth (- (count l) 1) l})
+
+; Unpack list for function
+(fn {unpack f l} {
+  eval (join (list f) l) })
+
+; Pack list for function
+(fn {pack f & xs} {f xs})
+
+; Curried and uncurried calling
+(def {curry} unpack)
+(def {uncurry} pack)
+
+; Do things in sequence
+(fn {do & l} {
+  if (== l nil)
+    {nil}
+    {last l}})
+
+; Open new scope
+(fn {let b} {
+  ((\ {_} b) ())})
+
+(fn {not x} {- 1 x})
+
+(fn {or x y} {+ x y})
+
+(fn {and x y} {* x y})
+
+(fn {take n l} {
+  if (== n 0)
+    {nil}
+    {join (head l) (take (- n 1) (tail l))}})
+
+(fn {elem x l} {
+  if (== l nil)
+    {false}
+    {if (== x (first l))
+      {true}
+      {elem x (tail l)}}})
+
+(fn {map f l} {
+  if (== l nil)
+    {nil}
+    {join (list (f (first l))) 
+          (map f (tail l))}})
+
+(fn {filter f l} {
+  if (== l nil)
+    {nil}
+    {join (if (f (first l)) 
+            {head l} 
+            {nil}) 
+          (filter f (tail l))}})
+
+(fn {foldl f z l} {
+  if (== l nil)
+    {z}
+    {foldl f (f z (first l)) (tail l)}})
+
+(fn {sum l} {foldl + 0 l})
+
+(fn {product l} {foldl * 1 l})
