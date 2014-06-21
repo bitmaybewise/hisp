@@ -1,6 +1,6 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;
-; Hisp Standard Library
-;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Hisp Standard Library ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def {nil} {})
 
@@ -11,11 +11,6 @@
 (def {fn} (\ {f b} {
   def (head f) (\ (tail f) b) }))
 
-(fn {count l} {
-  if (== l nil)
-    {0}
-    {+ 1 (count (tail l))}})
-
 (fn {first l} {eval (head l)})
 
 (fn {nth n l} {
@@ -23,7 +18,7 @@
     {first l}
     {nth (- n 1) (tail l)}})
 
-(fn {last l} {nth (- (count l) 1) l})
+(fn {last l} {nth (- (len l) 1) l})
 
 ; Unpack list for function
 (fn {unpack f l} {

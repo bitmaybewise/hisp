@@ -1,9 +1,128 @@
-; hello value
+; string var
 (def {hello} "hello world")
 
-; add two numbers
-(def {add} (\ {x y} {+ x y}))
+; list var
+(def {numbers} {1 2 3 4 5})
 
 ; printing values
 (print hello)
-(print (add 1 2))
+(print numbers)
+
+(print (== 1 1))
+(print (== 1 2))
+(print (!= 1 1))
+(print (> 1 1))
+(print (< 1 1))
+(print (>= 1 1))
+(print (<= 1 1))
+
+; operators
+
+(print (+ 1 1))
+(print (+ 1 1 1 1 1))
+
+(print (- 1 1))
+(print (- 1 1 1 1 1))
+
+(print (* 10 2.5))
+(print (* 10.5 2.1))
+(print (* 10 1 2 3))
+
+(print (/ 10 2.5))
+(print (/ 10.5 2.1))
+(print (/ 10 1 2 3))
+
+(print (% 10 5))
+(print (% 10 3))
+
+(print (^ 10 5))
+(print (^ 10 3))
+
+; list operations
+
+(print (list "a" "b" "c"))
+
+(print (len numbers))
+
+(print (head numbers))
+
+(print (tail numbers))
+
+(print (init numbers))
+
+(print (join {6 7} numbers))
+
+(print (cons 10 numbers))
+
+; lambdas
+(print ((\ {x y} {+ x y}) 1 2))
+
+(error "I'm a error")
+
+; std lib examples
+
+(load "std.hisp")
+
+(if (true)
+  {print "true"}
+  {print "false"})
+
+(if (not true)
+  {print "true"}
+  {print "false"})
+
+; functions
+(fn {add a b} {+ a b})
+
+(print (add 1 1))
+
+; first list element
+(print (first {1 2 3}))
+
+; last list element
+(print (last {1 2 3}))
+
+; nth list element
+(print (nth 1 {1 2 3}))
+
+(def {do-example}
+  (do
+    {+ 1 1}
+    {/ 100 10}
+    "abc"))
+
+(print do-example)
+
+(if (and true true)
+  {print "true"}
+  {print "false"})
+
+(if (or false true)
+  {print "true"}
+  {print "false"})
+
+(if (and false true)
+  {print "true"}
+  {print "false"})
+
+(print (take 2 {1 2 3 4 5 6}))
+
+(print (elem 3 {1 2 3 4 5 6}))
+
+(print (elem 7 {1 2 3 4 5 6}))
+
+(print (map (\ {x} {* x 2}) {1 2 3 4 5 6}))
+
+(fn {m2 x} {* x 2})
+
+(print (map m2 {1 2 3 4 5 6}))
+
+(fn {even x} {== 0 (% x 2)})
+
+(print (filter even {1 2 3 4 5 6}))
+
+(print (foldl + 0 {1 2 3 4 5 6}))
+
+(print (sum {1 2 3 4 5 6}))
+
+(print (product {1 2 3 4 5 6}))
