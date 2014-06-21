@@ -9,7 +9,7 @@ One more Lisp, a toy, created just for fun from [Build Your Own Lisp](http://bui
     $ sudo apt-get install libedit-dev
     $ make
 
-##### On Windows
+###### On Windows
 
 Are you kidding me? :stuck_out_tongue_closed_eyes:
 
